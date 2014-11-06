@@ -1,11 +1,11 @@
-package uk.ac.ebi.fgpt;
+package uk.ac.ebi.fgpt.efo;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test for simple OntologyReasoningDriver.
  */
 public class AppTest 
     extends TestCase
