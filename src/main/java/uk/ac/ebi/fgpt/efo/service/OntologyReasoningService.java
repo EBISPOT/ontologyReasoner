@@ -88,14 +88,6 @@ public class OntologyReasoningService {
 
             System.out.println("Axiom generator complete");
 
-//            OWLOntology inferredOntology = null;
-//            try {
-//                inferredOntology = getManager().createOntology();
-//                System.out.println("Inferred ontology created");
-//            } catch (OWLOntologyCreationException e) {
-//                e.printStackTrace();
-//            }
-            // now create the target ontology and save
             OWLOntology inferredOntology = stripOriginalOntology(reasoner);
 
             InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, gens);

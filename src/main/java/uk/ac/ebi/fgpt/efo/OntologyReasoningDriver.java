@@ -122,7 +122,7 @@ public class OntologyReasoningDriver
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private Logger getLog() {
+    protected Logger getLog() {
         return log;
     }
 
@@ -136,13 +136,13 @@ public class OntologyReasoningDriver
     public void reasonAndSave(String assertedOntologyFile, String inferredOntologyFile) throws RuntimeException {
 
         try {
-            System.out.println("Evaluating inferred view...");
+            getLog().debug("Evaluating inferred view...");
             OWLReasoner reasoner = reasoningService.reasonOverOntology(assertedOntologyFile);
 
             // now save inferred view
-            System.out.print("Ontology fully classified, saving inferred results...");
+            getLog().debug("Ontology fully classified, saving inferred results...");
             reasoningService.saveInferredOntology(reasoner, inferredOntologyFile);
-            System.out.println("..done!");
+            getLog().debug("..done!");
 
         }
 
