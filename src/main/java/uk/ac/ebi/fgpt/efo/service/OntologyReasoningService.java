@@ -63,7 +63,6 @@ public class OntologyReasoningService {
             return reasoner;
         }
 
-
     }
 
 
@@ -94,6 +93,7 @@ public class OntologyReasoningService {
             System.out.println("Inferred axioms passed to the reasoner");
             iog.fillOntology(getManager(), inferredOntology);
             System.out.println("Ontology filled");
+
             getManager().saveOntology(inferredOntology, new FileOutputStream(new File(outputFile)));
             getLog().info("Inferred view saved ok");
         }
