@@ -3,8 +3,10 @@ package uk.ac.ebi.fgpt.efo.utils;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.FileDocumentSource;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.*;
+import org.semanticweb.owlapi.util.SimpleIRIMapper;
 
 import java.io.File;
 
@@ -37,18 +39,29 @@ public class OntologyConfiguration {
 
     public OWLOntology loadOntology(String ontologyFile){
         OWLOntologyLoaderConfiguration config = new OWLOntologyLoaderConfiguration();
-        config = config.setMissingImportHandlingStrategy(MissingImportHandlingStrategy.SILENT);
+
+        String ontologyDirectory = ontologyFile.substring(0, ontologyFile.lastIndexOf("/")+1);
+
+        //Making ontology IRI to file path to make sure that all the imported ontologies will be found.
+        OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+        for (OntologyIRI2FilePathEnum enumeration : OntologyIRI2FilePathEnum.values()) {
+            manager.addIRIMapper(
+                    new SimpleIRIMapper(IRI.create(enumeration.getIri()),
+                            IRI.create("file:" + ontologyDirectory + enumeration.getFileName())));
+        }
 
         OWLOntology ontology = null;
         try {
-            if(ontologyFile!=null)
+            if(ontologyFile!=null) {
 
-                ontology = manager.loadOntologyFromOntologyDocument(new FileDocumentSource(new File(ontologyFile)), config);  // ... from named file
+                ontology = manager.loadOntologyFromOntologyDocument(new FileDocumentSource(new File(ontologyFile)), config);
+//                manager.setOntologyFormat(ontology, new RDFXMLOntologyFormat());
+                // ... from named file
 //            else if(file!=null)
 //                ontology = manager.loadOntologyFromOntologyDocument(new FileDocumentSource(file), config);                // ... from file stream
 //            else if(url!=null)
 //                ontology = manager.loadOntologyFromOntologyDocument(new IRIDocumentSource(IRI.create(url)), config);     // ... from URL
-            else
+            }else
                 throw new RuntimeException("\nDefaultEFOReader.readOwl: All arguments are null!");
       //     ontology = manager.loadOntologyFromOntologyDocument(new FileInputStream(new File(ontologyFile)));
            System.out.println("Successfully loaded ontology " + ontologyFile);
@@ -70,6 +83,7 @@ public class OntologyConfiguration {
             ConsoleProgressMonitor progressMonitor = new ConsoleProgressMonitor();
             OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
             OWLReasoner reasoner = reasonerFactory.createReasoner(ontology, config);
+
             return reasoner;
 
 

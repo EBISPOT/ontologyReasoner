@@ -1,9 +1,11 @@
 package uk.ac.ebi.fgpt.efo.service;
 
 
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.*;
+import org.semanticweb.owlapi.vocab.PrefixOWLOntologyFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.fgpt.efo.exception.OWLConversionException;
@@ -93,6 +95,8 @@ public class OntologyReasoningService {
             System.out.println("Inferred axioms passed to the reasoner");
             iog.fillOntology(getManager(), inferredOntology);
             System.out.println("Ontology filled");
+
+            getManager().setOntologyFormat(inferredOntology,new RDFXMLOntologyFormat());
 
             getManager().saveOntology(inferredOntology, new FileOutputStream(new File(outputFile)));
             getLog().info("Inferred view saved ok");
